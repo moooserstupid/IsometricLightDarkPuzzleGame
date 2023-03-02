@@ -53,6 +53,6 @@ public class GameObjective : MonoBehaviour, ITriggeredByLight {
         {
             gameObject.GetComponent<Renderer>().material.color = originalColor;
         }
-        Debug.Log("IsInsideBeam = " + isInsideBeam);
+        
     }
 }
