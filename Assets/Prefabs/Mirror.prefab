@@ -47,8 +47,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.38906783, y: 0.7520794, z: 0.023581147}
-  m_Center: {x: -0.018966585, y: 0.42720452, z: 0.11510676}
+  m_Size: {x: 0.38906783, y: 0.7520794, z: 0.29738545}
+  m_Center: {x: -0.018966585, y: 0.42720452, z: -0.021795392}
 --- !u!114 &7147773998821507576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,6 +66,7 @@ MonoBehaviour:
   reflectionTransform: {fileID: 7147773998922577255}
   reflectionInstance: {fileID: 0}
   inputLightTransform: {fileID: 0}
+  angleBetween: 0
 --- !u!114 &3397363924416235117
 MonoBehaviour:
   m_ObjectHideFlags: 0

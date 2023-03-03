@@ -17,12 +17,30 @@ public class PanAndZoom : MonoBehaviour {
     public float maxZoomValue;
     public float zoomSpeed = 1.2f;
 
+    private bool isPlacableObjectBeingDragged = false;
+    private void OnEnable()
+    {
+        ObjectDrag.placableObjectDragStartEvent += PlacableObjectDragStart;
+        ObjectDrag.placableObjectDragEndEvent += PlacableObjectDragEnd;
+    }
+    private void OnDisable()
+    {
+        ObjectDrag.placableObjectDragStartEvent -= PlacableObjectDragStart;
+        ObjectDrag.placableObjectDragEndEvent -= PlacableObjectDragEnd;
+    }
+    private void PlacableObjectDragStart()
+    {
+        isPlacableObjectBeingDragged = true;
+    }
+    private void PlacableObjectDragEnd()
+    {
+        isPlacableObjectBeingDragged = false;
+
+    }
     private SimpleSideMenu sideMenu;
     private void Start()
     {
         sideMenu = FindAnyObjectByType<SimpleSideMenu>();
-        
-        Debug.Log(sideMenu);
     }
     private void Update()
     {
@@ -38,7 +56,9 @@ public class PanAndZoom : MonoBehaviour {
         //        }
         //    }
         //}
-        if (sideMenu.CurrentState == State.Open) return;
+        Debug.Log("IsPLacableObjectBeingDragged" + isPlacableObjectBeingDragged);
+        if (isPlacableObjectBeingDragged || (sideMenu && sideMenu.CurrentState == State.Open)) return;
+        
         if (Input.GetMouseButtonDown(0))
         {
             Debug.Log("mouseDown");

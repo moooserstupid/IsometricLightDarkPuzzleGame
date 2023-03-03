@@ -14,6 +14,7 @@ public class GameObjective : MonoBehaviour, ITriggeredByLight {
 	Collider col = null;
 
     [Header("Debug")]
+    private bool positionHasChanged = false;
     [SerializeField] Color originalColor;
     [SerializeField] Color activationColor;
     private void Start()
@@ -44,15 +45,45 @@ public class GameObjective : MonoBehaviour, ITriggeredByLight {
             isInsideBeam = true;
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Trigger Enter");
+        if (positionHasChanged)
+        {
+            other.gameObject.SetActive(false);
+            other.gameObject.SetActive(true);
+            //StartCoroutine(LightUpdateDelay(other.gameObject));
+            positionHasChanged = false;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        Debug.Log("Trigger exit");
+        if (positionHasChanged)
+        {
+            other.gameObject.SetActive(false);
+            other.gameObject.SetActive(true);
+            //StartCoroutine(LightUpdateDelay(other.gameObject));
+            positionHasChanged = false;
+        }
+
+        //other.gameObject.SetActive(true);
+
+    }
     private void Update()
     {
         if (isInsideBeam)
         {
             gameObject.GetComponent<Renderer>().material.color = activationColor;
+            Debug.Log("Beam inside sphere");
         } else
         {
             gameObject.GetComponent<Renderer>().material.color = originalColor;
+            Debug.Log("Beam outside sphere");
+
         }
-        
+
     }
 }

@@ -19,6 +19,7 @@ public class Mirror : MonoBehaviour, ITriggeredByLight {
     [Header("Debug")]
     public GameObject reflectionInstance;
     public Transform inputLightTransform;
+    public int angleBetween;
 
     private Vector3 previousPosition;
     private bool positionHasChanged = false;
@@ -30,7 +31,7 @@ public class Mirror : MonoBehaviour, ITriggeredByLight {
     private void Start()
     {
         
-        reflectionInstance = Instantiate(reflectionPrefab);
+        reflectionInstance = Instantiate(reflectionPrefab, reflectionTransform);
         reflectionInstance.transform.position = reflectionTransform.position;
         reflectionInstance.SetActive(false);
         col = GetComponent<BoxCollider>();
@@ -101,13 +102,27 @@ public class Mirror : MonoBehaviour, ITriggeredByLight {
         if (isInsideBeam && inputLightTransform != null)
         {
             Debug.DrawRay(inputLightTransform.position, inputLightTransform.forward * 10, Color.green);
-            float angleBetween = Math.Abs(UtilFunctions.SignedAngleBetween(inputLightTransform.forward, reflectionTransform.forward, Vector3.up));
-            if (angleBetween >= 135 && angleBetween <= 180)
+            angleBetween = (int)Mathf.Round(UtilFunctions.SignedAngleBetween(inputLightTransform.forward, reflectionTransform.forward, Vector3.up));
+            Debug.Log("Angle Between = " + angleBetween);
+            if (angleBetween >= 130 && angleBetween <= 150)
             {
-                //Debug.Log("Reflecting" + angleBetween);
+                Debug.Log("Reflecting" + angleBetween);
                 reflectionInstance.SetActive(true);
-                var reflectionAngle = reflectionTransform.rotation.y + 90;
-                reflectionInstance.transform.rotation = Quaternion.Euler(reflectionTransform.rotation.x, 
+                reflectionInstance.transform.position = reflectionTransform.position;
+                var reflectionAngle = reflectionTransform.rotation.y - 45;
+                reflectionInstance.transform.localRotation = Quaternion.Euler(reflectionTransform.rotation.x,
+                                                                        reflectionAngle, reflectionTransform.rotation.z);
+                //reflectionInstance.transform.rotation = Quaternion.FromToRotation(inputLightTransform.forward, reflectionTransform.position);
+                //reflectionInstance.transform.rotation = Quaternion.Euler(reflectionTransform.rotation.x, 
+                //                                                        reflectionAngle, reflectionTransform.rotation.z);
+            }
+            else if (angleBetween <= -130 && angleBetween >= -150)
+            {
+                Debug.Log("Reflecting" + angleBetween);
+                reflectionInstance.SetActive(true);
+                reflectionInstance.transform.position = reflectionTransform.position;
+                var reflectionAngle = reflectionTransform.rotation.y + 45;
+                reflectionInstance.transform.localRotation = Quaternion.Euler(reflectionTransform.rotation.x,
                                                                         reflectionAngle, reflectionTransform.rotation.z);
             } else
             {
@@ -138,4 +153,6 @@ public class Mirror : MonoBehaviour, ITriggeredByLight {
         yield return new WaitForSeconds(0.1f);
         light.SetActive(true);
     }
+    
+    
 }

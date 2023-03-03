@@ -19,12 +19,23 @@ public class BuildingSystem : MonoBehaviour {
 	public GameObject prefab1;
 	public GameObject prefab2;
 
+	private GameManager gameManager;
+
 	private PlaceableObject objectToPlace;
-	
 
-    #region Unity Methods
+    private void OnEnable()
+    {
+		ItemDropHandler.objectDropEvent += OnDrop;
+    }
+    private void OnDisable()
+    {
+		ItemDropHandler.objectDropEvent -= OnDrop;
+	}
 
-    private void Awake()
+
+	#region Unity Methods
+
+	private void Awake()
     {
 		current = this;
 		if (gridLayout != null)
@@ -35,17 +46,22 @@ public class BuildingSystem : MonoBehaviour {
 			Debug.Log("GridLayout missing.");
         }
 		
+		
+    }
+    private void Start()
+    {
+		gameManager = GameManager.instance;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-			InitializeWithObject(prefab1);
-        } else if (Input.GetKeyDown(KeyCode.B))
-		{
-			InitializeWithObject(prefab2);
-		}
+  //      if (Input.GetKeyDown(KeyCode.A))
+  //      {
+		//	InitializeWithObject(prefab1);
+  //      } else if (Input.GetKeyDown(KeyCode.B))
+		//{
+		//	InitializeWithObject(prefab2);
+		//}
 
 		if (!objectToPlace)
         {
@@ -109,9 +125,9 @@ public class BuildingSystem : MonoBehaviour {
 
 	#region Building Placement
 
-	public void InitializeWithObject(GameObject prefab)
+	public void InitializeWithObject(GameObject prefab, Vector3 spawnPosition)
 	{
-		Vector3 position = SnapCoordinateToGrid(Vector3.zero);
+		Vector3 position = SnapCoordinateToGrid(spawnPosition);
 
 		GameObject obj = Instantiate(prefab, position, Quaternion.identity);
 		objectToPlace = obj.GetComponent<PlaceableObject>();
@@ -145,6 +161,18 @@ public class BuildingSystem : MonoBehaviour {
 
     }
 	
+	public void OnDrop(int objectID)
+    {
+		PlacableObjectSO[] objectList = gameManager.placableObjectList.objectList;
+
+		foreach(PlacableObjectSO obj in objectList) {
+			if (obj.objectID == objectID)
+            {
+				InitializeWithObject(obj.objectPrefab, GetMouseWorldPosition());
+				break;
+            }
+        }
+    }
 	
 	#endregion
 }
