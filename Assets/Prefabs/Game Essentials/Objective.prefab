@@ -95,7 +95,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 82c2a6f2a5354a2459fce3177988819b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -142,5 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 882d25116db54014baed1e70e3d933cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalColor: {r: 1, g: 0, b: 0, a: 0}
-  activationColor: {r: 0.27465573, g: 1, b: 0.04150939, a: 0}
+  gemPrefab: {fileID: 0}
+  gemInstance: {fileID: 0}
+  originalColor: {r: 1, g: 0.2838161, b: 0.2216981, a: 0}
+  activationColor: {r: 0.4521416, g: 1, b: 0.2783019, a: 0}
