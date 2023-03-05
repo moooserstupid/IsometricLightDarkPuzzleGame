@@ -16,8 +16,7 @@ public class BuildingSystem : MonoBehaviour {
 	[SerializeField] Tilemap mainTilemap;
 	[SerializeField] TileBase whiteTile;
 
-	public GameObject prefab1;
-	public GameObject prefab2;
+
 
 	private GameManager gameManager;
 
@@ -148,7 +147,9 @@ public class BuildingSystem : MonoBehaviour {
 			if (b == whiteTile)
 			{
 				return false;
+				
 			}
+			
 			
 		}
 		return true;
@@ -163,7 +164,7 @@ public class BuildingSystem : MonoBehaviour {
 	
 	public void OnDrop(int objectID)
     {
-		PlacableObjectSO[] objectList = gameManager.placableObjectList.objectList;
+		PlacableObjectSO[] objectList = gameManager.levelData.objectList;
 
 		foreach(PlacableObjectSO obj in objectList) {
 			if (obj.objectID == objectID)

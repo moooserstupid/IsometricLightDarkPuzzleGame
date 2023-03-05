@@ -8,13 +8,16 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(Collider))]
 public class GameObjective : MonoBehaviour, ITriggeredByLight {
 
-    
-    public static event Action GameWon = delegate { };
-	bool isInsideBeam = false;
+    public GameObject gemPrefab;
+    public static event Action ObjectiveActivated = delegate { };
+    public static event Action ObjectiveDeactivated = delegate { };
+
+    bool isInsideBeam = false;
 	Collider col = null;
 
     [Header("Debug")]
     private bool positionHasChanged = false;
+    [SerializeField] GameObject gemInstance;
     [SerializeField] Color originalColor;
     [SerializeField] Color activationColor;
     private void Start()
@@ -22,6 +25,7 @@ public class GameObjective : MonoBehaviour, ITriggeredByLight {
         gameObject.GetComponent<Renderer>().material.color = originalColor;
         
         col = GetComponent<Collider>();
+        gemInstance = Instantiate(gemPrefab, transform);
         Debug.Assert(col);
     }
 
@@ -55,6 +59,9 @@ public class GameObjective : MonoBehaviour, ITriggeredByLight {
             other.gameObject.SetActive(true);
             //StartCoroutine(LightUpdateDelay(other.gameObject));
             positionHasChanged = false;
+
+            gemInstance?.GetComponent<GemRotation>().UpdateRotationSpeed(2);
+            ObjectiveActivated?.Invoke();
         }
     }
 
@@ -67,6 +74,9 @@ public class GameObjective : MonoBehaviour, ITriggeredByLight {
             other.gameObject.SetActive(true);
             //StartCoroutine(LightUpdateDelay(other.gameObject));
             positionHasChanged = false;
+
+            gemInstance?.GetComponent<GemRotation>().UpdateRotationSpeed(0);
+            ObjectiveDeactivated?.Invoke();
         }
 
         //other.gameObject.SetActive(true);
@@ -77,10 +87,12 @@ public class GameObjective : MonoBehaviour, ITriggeredByLight {
         if (isInsideBeam)
         {
             gameObject.GetComponent<Renderer>().material.color = activationColor;
+            
             Debug.Log("Beam inside sphere");
         } else
         {
             gameObject.GetComponent<Renderer>().material.color = originalColor;
+            
             Debug.Log("Beam outside sphere");
 
         }

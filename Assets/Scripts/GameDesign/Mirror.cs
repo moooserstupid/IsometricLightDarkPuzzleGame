@@ -7,9 +7,6 @@ using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Collider))]
 public class Mirror : MonoBehaviour, ITriggeredByLight {
-	bool isReflecting = false;
-
-    
 
     public GameObject reflectionPrefab;
     public Transform reflectionTransform;
@@ -104,7 +101,7 @@ public class Mirror : MonoBehaviour, ITriggeredByLight {
             Debug.DrawRay(inputLightTransform.position, inputLightTransform.forward * 10, Color.green);
             angleBetween = (int)Mathf.Round(UtilFunctions.SignedAngleBetween(inputLightTransform.forward, reflectionTransform.forward, Vector3.up));
             Debug.Log("Angle Between = " + angleBetween);
-            if (angleBetween >= 130 && angleBetween <= 150)
+            if (angleBetween >= 90 && angleBetween <= 180)
             {
                 Debug.Log("Reflecting" + angleBetween);
                 reflectionInstance.SetActive(true);
@@ -116,7 +113,7 @@ public class Mirror : MonoBehaviour, ITriggeredByLight {
                 //reflectionInstance.transform.rotation = Quaternion.Euler(reflectionTransform.rotation.x, 
                 //                                                        reflectionAngle, reflectionTransform.rotation.z);
             }
-            else if (angleBetween <= -130 && angleBetween >= -150)
+            else if (angleBetween <= -90 && angleBetween >= -180)
             {
                 Debug.Log("Reflecting" + angleBetween);
                 reflectionInstance.SetActive(true);

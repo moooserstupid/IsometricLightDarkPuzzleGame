@@ -15,7 +15,7 @@ public class InventoryManager : MonoBehaviour {
     public PlacableObjectSO[] objectList;
     private void Start()
     {
-        objectList = GameManager.instance.placableObjectList.objectList;
+        objectList = GameManager.instance.levelData.objectList;
         itemPreviewInstanceList = new GameObject[objectList.Length];
         Debug.Log(objectList.Length);
         for(int i = 0; i < objectList.Length; ++i) {
