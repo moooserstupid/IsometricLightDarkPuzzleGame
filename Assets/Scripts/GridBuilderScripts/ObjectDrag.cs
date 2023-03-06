@@ -16,24 +16,40 @@ public class ObjectDrag : MonoBehaviour {
     public float touchDelayCounter = 0f;
     public bool shouldRotate = false;
 
-    private Vector3 offset;
-    
+    public Vector3 offset;
+
+    public Vector3 initMousePos;
+    public bool imousePosChanged = true;
 
 
     private void OnMouseDown()
     {
-        offset = transform.position - BuildingSystem.GetMouseWorldPosition();
+        initMousePos = Input.mousePosition;
+        Vector3 mouseWorldPos = BuildingSystem.GetMouseWorldPosition();
+        offset = transform.position - mouseWorldPos;
+
+        //BuildingSystem.current.DrawHighlightTile(mouseWorldPos);
+
         placableObjectDragStartEvent?.Invoke();
         shouldRotate = true;
+        
     }
     private void OnMouseDrag()
     {
         touchDelayCounter += Time.deltaTime;
         if (touchDelayCounter >= rotateTouchDelay) shouldRotate = false;
-        Vector3 pos = BuildingSystem.GetMouseWorldPosition() + offset;
-        transform.position = BuildingSystem.current.SnapCoordinateToGrid(pos);
+
+        if (Vector3.Magnitude(initMousePos - Input.mousePosition) >= 0.5f)
+        {
+            Vector3 mouseWorldPos = BuildingSystem.GetMouseWorldPosition();
+            transform.position = mouseWorldPos;
+            BuildingSystem.current.DrawHighlightTile(mouseWorldPos);
+            initMousePos = Input.mousePosition;
+        }
+        
 
     }
+    
     private void OnMouseUp()
     {
         if (shouldRotate)
@@ -41,7 +57,11 @@ public class ObjectDrag : MonoBehaviour {
             PlaceableObject obj = GetComponent<PlaceableObject>();
             obj.Rotate();
             
+        } else
+        {
+            transform.position = BuildingSystem.current.SnapCoordinateToGrid(BuildingSystem.GetMouseWorldPosition());
         }
+        BuildingSystem.current.EraseHighlightTile();
         shouldRotate = false;
         touchDelayCounter = 0;
         placableObjectDragEndEvent?.Invoke();

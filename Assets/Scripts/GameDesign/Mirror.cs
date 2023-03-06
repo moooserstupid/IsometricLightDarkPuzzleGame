@@ -56,6 +56,7 @@ public class Mirror : MonoBehaviour, ITriggeredByLight {
         else
         {
             isInsideBeam = true;
+            reflectionTransform.position = trigger.ClosestPoint(reflectionTransform.position);
             
         }
 
